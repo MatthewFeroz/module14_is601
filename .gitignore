@@ -1,0 +1,12 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*.db
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+test-results/
+playwright-report/
