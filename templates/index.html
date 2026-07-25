@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Cipher Calculations · Secure access{% endblock %}
+{% block page_name %}home{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-copy reveal">
+    <p class="eyebrow"><span>13</span> Identity checkpoint</p>
+    <h1>Your work,<br><em>under lock.</em></h1>
+    <p class="hero-lede">
+      Create an account, receive a signed JSON Web Token, and enter a workspace
+      built around one principle: only you hold the key to your records.
+    </p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="/register">Create your key <span>↗</span></a>
+      <a class="text-link" href="/login">I already have access <span>→</span></a>
+    </div>
+  </div>
+
+  <aside class="cipher-card reveal reveal-late" aria-label="Authentication flow">
+    <div class="card-index">AUTH / 013</div>
+    <div class="token-visual" aria-hidden="true">
+      <span class="token-ring token-ring-one"></span>
+      <span class="token-ring token-ring-two"></span>
+      <span class="token-core">JWT</span>
+    </div>
+    <ol class="flow-list">
+      <li><span>01</span><div><strong>Register</strong><small>Validate + hash</small></div></li>
+      <li><span>02</span><div><strong>Authenticate</strong><small>Verify credentials</small></div></li>
+      <li><span>03</span><div><strong>Authorize</strong><small>Sign + store token</small></div></li>
+    </ol>
+  </aside>
+</section>
+
+<section class="trust-strip" aria-label="Security features">
+  <article><span>01</span><h2>bcrypt</h2><p>Passwords are salted and hashed before PostgreSQL ever sees them.</p></article>
+  <article><span>02</span><h2>HS256</h2><p>Short-lived access tokens carry signed identity—not your password.</p></article>
+  <article><span>03</span><h2>Playwright</h2><p>Real browser journeys verify successful and rejected access.</p></article>
+</section>
+{% endblock %}

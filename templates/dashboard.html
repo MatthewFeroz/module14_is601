@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}Workspace · Cipher Calculations{% endblock %}
+{% block page_name %}dashboard{% endblock %}
+
+{% block content %}
+<section class="dashboard-shell">
+  <div class="dashboard-heading reveal">
+    <p class="eyebrow"><span>03</span> Authenticated workspace</p>
+    <h1>Access<br><em>confirmed.</em></h1>
+  </div>
+
+  <div class="identity-card reveal reveal-late" data-identity-card>
+    <div class="panel-heading">
+      <p>BEARER PROFILE</p>
+      <span>VERIFYING</span>
+    </div>
+    <div class="identity-loading">
+      <span class="spinner" aria-hidden="true"></span>
+      <p>Validating the token with <code>/auth/me</code>…</p>
+    </div>
+  </div>
+</section>
+{% endblock %}
