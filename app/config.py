@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     app_name: str = "Cipher Calculations"
-    database_url: str = "sqlite+pysqlite:///./module13.db"
+    database_url: str = "sqlite+pysqlite:///./module14.db"
     jwt_secret_key: str = "local-development-secret-change-in-production"
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30

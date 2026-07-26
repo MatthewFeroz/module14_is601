@@ -10,9 +10,9 @@ RUN apt-get update \
     && apt-get install --yes --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
+COPY requirements-prod.txt .
 RUN python -m pip install --upgrade pip \
-    && pip install --requirement requirements.txt
+    && pip install --requirement requirements-prod.txt
 
 COPY app ./app
 COPY static ./static
