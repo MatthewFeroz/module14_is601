@@ -40,7 +40,7 @@ def test_register_then_login_stores_token_and_authorizes_dashboard(
     page.get_by_role("button", name="Create secure account").click()
 
     alert = page.get_by_role("status")
-    expect(alert).to_contain_text("Registration successful")
+    expect(alert).to_contain_text("Account created")
     page.screenshot(
         path=screenshot_directory / "registration-success.png",
         full_page=True,
@@ -51,9 +51,11 @@ def test_register_then_login_stores_token_and_authorizes_dashboard(
     page.get_by_label("Password", exact=True).fill(user["password"])
     page.get_by_role("button", name="Sign in securely").click()
 
-    expect(alert).to_contain_text("Login successful")
+    expect(alert).to_contain_text("Identity confirmed")
     page.wait_for_url(f"{live_server}/dashboard")
-    expect(page.get_by_text(f"Welcome, {user['first_name']}.")).to_be_visible()
+    expect(page.locator("[data-workspace-user]")).to_have_text(
+        user["username"]
+    )
     assert page.evaluate("localStorage.getItem('access_token')").count(".") == 2
     page.screenshot(
         path=screenshot_directory / "authenticated-dashboard.png",
@@ -69,10 +71,7 @@ def test_short_password_shows_client_side_error(page, live_server):
     page.get_by_role("button", name="Create secure account").click()
 
     expect(page.get_by_role("status")).to_contain_text(
-        "Please correct the highlighted registration fields"
-    )
-    expect(page.locator("[data-error-for='registerPassword']")).to_contain_text(
-        "Use 8–72 characters"
+        "Complete every field using the requested format"
     )
     assert page.url == f"{live_server}/register"
 

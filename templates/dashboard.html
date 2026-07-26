@@ -4,21 +4,89 @@
 {% block page_name %}dashboard{% endblock %}
 
 {% block content %}
-<section class="dashboard-shell">
-  <div class="dashboard-heading reveal">
+<section class="workspace-hero">
+  <div class="workspace-heading reveal">
     <p class="eyebrow"><span>03</span> Authenticated workspace</p>
-    <h1>Access<br><em>confirmed.</em></h1>
+    <h1>Run the<br><em>numbers.</em></h1>
+    <p>Signed in as <strong data-workspace-user>calculator</strong>. Every record below is filtered by your token identity.</p>
   </div>
 
-  <div class="identity-card reveal reveal-late" data-identity-card>
+  <div class="calculation-console reveal reveal-late">
     <div class="panel-heading">
-      <p>BEARER PROFILE</p>
-      <span>VERIFYING</span>
+      <p>ADD / CALCULATE</p>
+      <span>POST /calculations</span>
     </div>
-    <div class="identity-loading">
-      <span class="spinner" aria-hidden="true"></span>
-      <p>Validating the token with <code>/auth/me</code>…</p>
+    <div id="formAlert" class="form-alert" role="status" aria-live="polite" hidden></div>
+    <form id="calculationForm" class="calculation-form" novalidate>
+      <div class="field">
+        <label for="calcType">Operation</label>
+        <select id="calcType" name="type" required>
+          <option value="addition">Addition +</option>
+          <option value="subtraction">Subtraction −</option>
+          <option value="multiplication">Multiplication ×</option>
+          <option value="division">Division ÷</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="calcInputs">Numbers</label>
+        <input id="calcInputs" name="inputs" type="text" inputmode="decimal" autocomplete="off" placeholder="12, 4, 2" aria-describedby="calcInputHelp" required>
+        <small id="calcInputHelp" class="field-hint">Use commas between two or more finite numbers.</small>
+      </div>
+      <button class="button button-primary button-submit" type="submit">
+        <span class="button-label">Calculate + save</span>
+        <span class="button-arrow" aria-hidden="true">↗</span>
+      </button>
+    </form>
+  </div>
+</section>
+
+<section class="insights-section" id="insightsPanel" aria-labelledby="insightsTitle">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow"><span>04</span> Final feature</p>
+      <h2 id="insightsTitle">Activity pulse</h2>
     </div>
+    <p>Live, user-specific aggregates from <code>GET /insights</code>.</p>
+  </div>
+  <div class="metric-grid">
+    <article><span>Records</span><strong data-insight="total" data-testid="insight-total">—</strong></article>
+    <article><span>Average result</span><strong data-insight="average" data-testid="insight-average">—</strong></article>
+    <article><span>Highest result</span><strong data-insight="highest" data-testid="insight-highest">—</strong></article>
+    <article class="metric-wide"><span>Latest activity</span><strong data-insight="latest">Loading…</strong></article>
+  </div>
+  <div class="operation-meters" aria-label="Operation usage">
+    {% for operation in ["addition", "subtraction", "multiplication", "division"] %}
+    <div class="operation-meter">
+      <div><span>{{ operation }}</span><strong data-operation-count="{{ operation }}">0</strong></div>
+      <div class="meter-track"><span data-operation-meter="{{ operation }}"></span></div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="ledger-section" aria-labelledby="ledgerTitle">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow"><span>05</span> Browse records</p>
+      <h2 id="ledgerTitle">Calculation ledger</h2>
+    </div>
+    <button class="text-button" type="button" data-logout>End session →</button>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Operation</th>
+          <th>Expression</th>
+          <th>Result</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="calculationsTable">
+        <tr class="empty-row"><td colspan="5">Loading your private ledger…</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
 {% endblock %}

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Read record · Cipher Calculations{% endblock %}
+{% block page_name %}view{% endblock %}
+
+{% block content %}
+<section class="record-shell" data-calculation-id="{{ calc_id }}">
+  <div class="record-intro reveal">
+    <p class="eyebrow"><span>R</span> Read calculation</p>
+    <h1>One<br><em>record.</em></h1>
+    <p>A direct, owner-protected lookup from <code>GET /calculations/{id}</code>.</p>
+    <a class="text-link" href="/dashboard">← Back to ledger</a>
+  </div>
+
+  <article class="record-card reveal reveal-late">
+    <div class="panel-heading">
+      <p>CALCULATION DETAIL</p>
+      <span>JWT OWNER ONLY</span>
+    </div>
+    <div id="formAlert" class="form-alert" role="alert" aria-live="polite" hidden></div>
+    <div class="record-loading" data-record-loading><span class="spinner"></span><p>Reading record…</p></div>
+    <div data-record-content hidden>
+      <div class="expression-display" data-detail-expression></div>
+      <div class="result-display">
+        <span>Result</span>
+        <strong data-detail-result data-testid="detail-result"></strong>
+      </div>
+      <dl class="record-meta">
+        <div><dt>Operation</dt><dd data-detail-operation></dd></div>
+        <div><dt>Created</dt><dd data-detail-created></dd></div>
+        <div><dt>Updated</dt><dd data-detail-updated></dd></div>
+        <div class="meta-wide"><dt>Record ID</dt><dd data-detail-id></dd></div>
+      </dl>
+      <div class="record-actions">
+        <a class="button button-primary" data-edit-link href="#">Edit inputs <span>↗</span></a>
+        <button class="button button-danger" type="button" data-delete-record>Delete record</button>
+      </div>
+    </div>
+  </article>
+</section>
+{% endblock %}

@@ -111,6 +111,6 @@ def page(browser):
 
 @pytest.fixture(scope="session")
 def screenshot_directory() -> Path:
-    directory = Path("docs/images")
+    directory = Path("test-results/screenshots")
     directory.mkdir(parents=True, exist_ok=True)
     return directory

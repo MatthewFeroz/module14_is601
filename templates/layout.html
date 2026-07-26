@@ -4,23 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#112c26">
-  <meta name="description" content="Secure JWT authentication for the Cipher Calculations workspace.">
+  <meta name="description" content="JWT-secured calculation BREAD workspace.">
   <title>{% block title %}Cipher Calculations{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
-  <script src="{{ url_for('static', path='js/app.js') }}" defer></script>
+  <script src="{{ url_for('static', path='js/script.js') }}" defer></script>
 </head>
 <body data-page="{% block page_name %}default{% endblock %}">
   <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="site-shell">
     <header class="site-header">
-      <a class="wordmark" href="/" aria-label="Cipher Calculations home">
-        <span class="wordmark-mark" aria-hidden="true">C<span>13</span></span>
+      <a class="wordmark" href="{{ url_for('read_index') }}" aria-label="Cipher Calculations home">
+        <span class="wordmark-mark" aria-hidden="true">C<span>14</span></span>
         <span class="wordmark-text">Cipher<br><strong>Calculations</strong></span>
       </a>
       <nav class="site-nav" aria-label="Primary navigation">
-        <a href="/">Overview</a>
+        <a href="{{ url_for('read_index') }}">Overview</a>
         <a href="/docs">API desk</a>
-        <a class="nav-session" href="/login" data-auth-link>Sign in</a>
+        <a class="nav-session" href="{{ url_for('login_page') }}" data-auth-link>Sign in</a>
       </nav>
     </header>
 
@@ -29,8 +29,8 @@
     </main>
 
     <footer class="site-footer">
-      <p>Module 13 · JWT authentication laboratory</p>
-      <p class="footer-status"><span aria-hidden="true"></span> Encrypted in transit. Hashed at rest.</p>
+      <p>Module 14 · Secured BREAD laboratory</p>
+      <p class="footer-status"><span aria-hidden="true"></span> JWT protected · User isolated</p>
     </footer>
   </div>
 </body>

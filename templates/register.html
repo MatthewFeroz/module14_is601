@@ -10,7 +10,7 @@
     <h1>Make your<br><em>key.</em></h1>
     <p>A few details establish your workspace identity. Your password is hashed before it is stored.</p>
     <ul class="requirement-list" aria-label="Password requirements">
-      <li data-requirement="length"><span></span>8–72 characters</li>
+      <li data-requirement="length"><span></span>8–128 characters</li>
       <li data-requirement="upper"><span></span>One uppercase letter</li>
       <li data-requirement="lower"><span></span>One lowercase letter</li>
       <li data-requirement="number"><span></span>One number</li>
@@ -29,66 +29,44 @@
       <div class="field-row">
         <div class="field">
           <label for="firstName">First name</label>
-          <input id="firstName" name="first_name" type="text" autocomplete="given-name"
-                 placeholder="Ada" maxlength="50" required>
-          <small class="field-error" data-error-for="firstName"></small>
+          <input id="firstName" name="first_name" type="text" autocomplete="given-name" placeholder="Ada" maxlength="50" required>
         </div>
         <div class="field">
           <label for="lastName">Last name</label>
-          <input id="lastName" name="last_name" type="text" autocomplete="family-name"
-                 placeholder="Lovelace" maxlength="50" required>
-          <small class="field-error" data-error-for="lastName"></small>
+          <input id="lastName" name="last_name" type="text" autocomplete="family-name" placeholder="Lovelace" maxlength="50" required>
         </div>
       </div>
-
       <div class="field">
         <label for="registerEmail">Email address</label>
-        <input id="registerEmail" name="email" type="email" autocomplete="email"
-               placeholder="ada@example.com" maxlength="254" required>
-        <small class="field-error" data-error-for="registerEmail"></small>
+        <input id="registerEmail" name="email" type="email" autocomplete="email" placeholder="ada@example.com" maxlength="254" required>
       </div>
-
       <div class="field">
         <label for="registerUsername">Username</label>
-        <input id="registerUsername" name="username" type="text" autocomplete="username"
-               placeholder="ada_l" minlength="3" maxlength="50"
-               pattern="[A-Za-z0-9_.-]+" required>
+        <input id="registerUsername" name="username" type="text" autocomplete="username" placeholder="ada_l" minlength="3" maxlength="50" pattern="[A-Za-z0-9_.-]+" required>
         <small class="field-hint">Letters, numbers, dots, dashes, and underscores.</small>
-        <small class="field-error" data-error-for="registerUsername"></small>
       </div>
-
       <div class="field-row">
         <div class="field">
           <label for="registerPassword">Password</label>
           <div class="password-wrap">
-            <input id="registerPassword" name="password" type="password"
-                   autocomplete="new-password" placeholder="8+ characters"
-                   minlength="8" maxlength="72" required>
-            <button class="password-toggle" type="button"
-                    data-password-toggle="registerPassword" aria-label="Show password">Show</button>
+            <input id="registerPassword" name="password" type="password" autocomplete="new-password" placeholder="8+ characters" minlength="8" maxlength="72" required>
+            <button class="password-toggle" type="button" data-password-toggle="registerPassword" aria-label="Show password">Show</button>
           </div>
-          <small class="field-error" data-error-for="registerPassword"></small>
         </div>
         <div class="field">
           <label for="confirmPassword">Confirm password</label>
           <div class="password-wrap">
-            <input id="confirmPassword" name="confirm_password" type="password"
-                   autocomplete="new-password" placeholder="Repeat password"
-                   minlength="8" maxlength="72" required>
-            <button class="password-toggle" type="button"
-                    data-password-toggle="confirmPassword" aria-label="Show password">Show</button>
+            <input id="confirmPassword" name="confirm_password" type="password" autocomplete="new-password" placeholder="Repeat password" minlength="8" maxlength="72" required>
+            <button class="password-toggle" type="button" data-password-toggle="confirmPassword" aria-label="Show password">Show</button>
           </div>
-          <small class="field-error" data-error-for="confirmPassword"></small>
         </div>
       </div>
-
       <button class="button button-primary button-submit" type="submit">
         <span class="button-label">Create secure account</span>
         <span class="button-arrow" aria-hidden="true">↗</span>
       </button>
     </form>
-
-    <p class="panel-switch">Already registered? <a href="/login">Sign in instead →</a></p>
+    <p class="panel-switch">Already registered? <a href="{{ url_for('login_page') }}">Sign in instead →</a></p>
   </div>
 </section>
 {% endblock %}

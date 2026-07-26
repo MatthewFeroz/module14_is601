@@ -8,7 +8,7 @@
   <div class="auth-intro reveal">
     <p class="eyebrow"><span>02</span> Verify identity</p>
     <h1>Welcome<br><em>back.</em></h1>
-    <p>Enter your email or username. We’ll exchange valid credentials for a signed access token.</p>
+    <p>Enter your email or username. Valid credentials are exchanged for a signed access token.</p>
     <div class="security-note">
       <span class="security-icon" aria-hidden="true">⌁</span>
       <p><strong>No plain-text passwords.</strong><br>Your password is checked against its one-way bcrypt hash.</p>
@@ -25,35 +25,25 @@
     <form id="loginForm" class="auth-form" novalidate>
       <div class="field">
         <label for="loginIdentifier">Email or username</label>
-        <input id="loginIdentifier" name="identifier" type="text" autocomplete="username"
-               placeholder="you@example.com" minlength="3" maxlength="254" required>
-        <small class="field-error" data-error-for="loginIdentifier"></small>
+        <input id="loginIdentifier" name="username" type="text" autocomplete="username" placeholder="you@example.com" minlength="3" maxlength="254" required>
       </div>
-
       <div class="field">
         <label for="loginPassword">Password</label>
         <div class="password-wrap">
-          <input id="loginPassword" name="password" type="password"
-                 autocomplete="current-password" placeholder="Enter your password"
-                 minlength="8" maxlength="72" required>
-          <button class="password-toggle" type="button"
-                  data-password-toggle="loginPassword" aria-label="Show password">Show</button>
+          <input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" minlength="8" maxlength="72" required>
+          <button class="password-toggle" type="button" data-password-toggle="loginPassword" aria-label="Show password">Show</button>
         </div>
-        <small class="field-error" data-error-for="loginPassword"></small>
       </div>
-
       <label class="check-field">
         <input id="rememberLogin" name="remember" type="checkbox">
         <span>Remember my identifier on this device</span>
       </label>
-
       <button class="button button-primary button-submit" type="submit">
         <span class="button-label">Sign in securely</span>
         <span class="button-arrow" aria-hidden="true">↗</span>
       </button>
     </form>
-
-    <p class="panel-switch">New to the workspace? <a href="/register">Create your account →</a></p>
+    <p class="panel-switch">New to the workspace? <a href="{{ url_for('register_page') }}">Create your account →</a></p>
   </div>
 </section>
 {% endblock %}

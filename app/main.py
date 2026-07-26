@@ -47,7 +47,7 @@ templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
-def home_page(request: Request):
+def read_index(request: Request):
     return templates.TemplateResponse(request, "index.html")
 
 
@@ -75,7 +75,7 @@ def calculation_detail_page(request: Request, calculation_id: str):
     return templates.TemplateResponse(
         request,
         "view_calculation.html",
-        {"calculation_id": calculation_id},
+        {"calc_id": calculation_id},
     )
 
 
@@ -88,7 +88,7 @@ def calculation_edit_page(request: Request, calculation_id: str):
     return templates.TemplateResponse(
         request,
         "edit_calculation.html",
-        {"calculation_id": calculation_id},
+        {"calc_id": calculation_id},
     )
 
 
