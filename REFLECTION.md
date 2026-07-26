@@ -1,73 +1,72 @@
-# Module 13 Reflection
+# Module 14 Development Reflection
 
-## Connecting the Front End to the API
+## Continuing the Module 13 application
 
-The most valuable part of this module was seeing authentication as one complete
-browser-to-database workflow rather than as separate HTML, JavaScript, and
-FastAPI exercises. The course videos emphasized that Jinja performs the
-server-side page composition while JavaScript manipulates the browser's
-Document Object Model after it loads. I followed that model with a shared
-`layout.html`, separate page templates, and one deferred JavaScript file that
-registers its event listeners after `DOMContentLoaded`.
+Module 14 now directly continues my Module 13 JWT project rather than treating
+authentication and calculations as unrelated applications. The existing user,
+bcrypt, token, database, and Pydantic code remains the security foundation.
+Calculation persistence and BREAD routes were added around that foundation.
 
-Intercepting each form's submit event with `preventDefault()` made the
-registration and login pages behave like API clients. The code builds a JSON
-object from the form, sends it with `fetch`, waits for the response, and updates
-the existing page instead of allowing a traditional form submission to erase
-the user's input. Matching the client-side rules to the Pydantic rules was
-important: the browser gives immediate, field-specific feedback, while the API
-remains the authoritative validation boundary.
+This continuity made the purpose of JWT authentication clearer. Login is not
+only a feature by itself; the verified token supplies the user identity used by
+every calculation query.
 
-## Authentication and Authorization
+## Completing the BREAD workflow
 
-The registration flow reinforced why a password should never be recoverable
-from the database. The application creates a unique bcrypt salt and hash for
-each password and exposes neither the original value nor the stored hash in its
-response models. Duplicate checks are case-insensitive, and database uniqueness
-constraints remain in place to handle concurrent requests safely.
+Browse, Read, Edit, Add, and Delete are more than five API routes. Each
+operation also requires an authenticated request, ownership filtering,
+database persistence, JSON serialization, and a matching front-end state
+change.
 
-The login flow clarified the difference between authentication and
-authorization. Valid credentials authenticate the user and produce a
-short-lived signed JWT. The browser stores that token in `localStorage`, as
-demonstrated in the video, and redirects to the dashboard. The dashboard then
-uses the token as an HTTP bearer credential when requesting `/auth/me`.
-Possessing a dashboard URL is not authorization; the server still verifies the
-signature, expiry, access-token type, active account, and database user before
-returning any protected data.
+The most important security decision was deriving the calculation owner from
+the verified JWT. The server never accepts a user ID from the calculation form
+as proof of ownership. Read, edit, and delete queries filter by both the
+calculation ID and authenticated user ID. An unowned record therefore returns
+`404`, which prevents users from learning whether another user's record
+exists.
 
-## Testing Challenges
+## Validation and error handling
 
-Playwright made the boundaries between the layers visible. The positive test
-registers through the real form, waits for its success message and redirect,
-logs in through the real form, verifies the stored JWT, and confirms that the
-protected profile appears. The negative tests prove that a short password is
-stopped by browser validation and that a valid request with the wrong password
-reaches the server, receives `401 Unauthorized`, and produces a useful UI
-message without storing a token.
+Validation exists at multiple boundaries. JavaScript provides immediate
+feedback for missing values, nonnumeric operands, and division by zero.
+Pydantic and calculation-domain functions repeat the important rules because
+browser code can be bypassed.
 
-One visual issue only appeared during screenshot review. The test context
-requests reduced motion, but the delayed reveal animation still briefly left
-the authenticated identity card transparent. The element existed, so a DOM
-assertion passed, yet the screenshot showed a blank column. Removing animation
-delays under `prefers-reduced-motion` fixed both accessibility behavior and the
-captured evidence. This was a useful reminder that functional assertions and
-visual inspection catch different classes of defects.
+Invalid updates are calculated before the valid stored values are replaced.
+If an update fails, the transaction is rolled back and the original record
+remains unchanged. Integration tests verify that behavior directly.
 
-The Docker Compose smoke test exposed another integration issue: publishing
-PostgreSQL on host port 5432 conflicted with an earlier course container.
-PostgreSQL only needs to be reachable by the app on the internal Compose
-network, so removing the host binding made the project coexist cleanly with
-prior modules without weakening the architecture.
+## Testing lessons
 
-## CI/CD and Next Steps
+The project demonstrates why different test levels are complementary:
 
-The final pipeline mirrors the local workflow. GitHub Actions starts a clean
-PostgreSQL service, installs Chromium, runs all 19 tests, preserves JUnit,
-coverage, and screenshot evidence, and only then builds and publishes the
-Docker image. Publishing both `latest` and commit-SHA tags keeps the convenient
-default tag while retaining an immutable deployment reference.
+- Unit tests verify arithmetic, Pydantic, JWT, bcrypt, and insight rules.
+- Integration tests verify authentication, persistence, ownership isolation,
+  controlled errors, and complete BREAD behavior.
+- Bun tests verify reusable client-side parsing and preview functions.
+- Playwright uses a real Chromium browser to verify registration, login,
+  validation, creation, browsing, reading, editing, deletion, redirects, and
+  the Insights display.
 
-I intentionally stopped at authentication and a protected identity view. The
-existing calculation BREAD ideas belong to Module 14. That separation keeps
-this submission aligned with Module 13's learning goal and leaves a clean
-authorization foundation for user-owned calculation routes in the next module.
+The complete browser journey is valuable because request-only tests cannot
+prove that scripts loaded, selectors remained connected to the templates, or
+the visible ledger changed after an API response.
+
+## CI/CD and containerization
+
+The GitHub Actions workflow treats deployment as a sequence of gates. Python
+and JavaScript tests run first. The production image is built and scanned for
+fixed high and critical vulnerabilities only after tests pass. Docker Hub
+publication occurs only after the security scan succeeds.
+
+The container runs as a non-root user and installs only production
+dependencies. Publishing `latest` plus the Git commit SHA provides both a
+convenient tag and an immutable connection between deployed code and source.
+
+## Final takeaway
+
+A feature is not complete merely because its route works once. A professional
+feature includes validation, authorization, persistence, useful errors,
+automated tests at several boundaries, documentation, a reproducible
+container, and a gated delivery pipeline. Module 14 connected those practices
+to the authentication work completed in Module 13.

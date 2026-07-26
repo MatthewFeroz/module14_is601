@@ -1,227 +1,227 @@
-# Module 13 — JWT Authentication
+# Module 14: Secure Calculation BREAD
 
-[![Test and publish](https://github.com/MatthewFeroz/module13-jwt-auth/actions/workflows/ci.yml/badge.svg)](https://github.com/MatthewFeroz/module13-jwt-auth/actions/workflows/ci.yml)
+[![Module 14 CI/CD](https://github.com/MatthewFeroz/module14_is601/actions/workflows/ci.yml/badge.svg)](https://github.com/MatthewFeroz/module14_is601/actions/workflows/ci.yml)
 
-Cipher Calculations is a focused Module 13 full-stack authentication project.
-FastAPI and PostgreSQL register users with bcrypt password hashes, issue signed
-JSON Web Tokens for valid logins, and protect a profile endpoint with bearer
-authentication. Jinja templates, CSS, and browser JavaScript provide the
-registration, login, and authenticated-workspace experience. Calculation BREAD
-is intentionally deferred to Module 14.
+Cipher Calculations is a FastAPI, PostgreSQL, and JavaScript application in
+which authenticated users manage a private calculation history. It implements
+complete BREAD functionality, client and server validation, JWT ownership
+boundaries, automated testing, container security scanning, and multi-platform
+Docker Hub publishing.
 
-- GitHub: [MatthewFeroz/module13-jwt-auth](https://github.com/MatthewFeroz/module13-jwt-auth)
-- Docker Hub: [matthewferoz/module13-jwt-auth](https://hub.docker.com/r/matthewferoz/module13-jwt-auth)
+This repository directly continues the personal
+[Module 13 JWT application](https://github.com/MatthewFeroz/module13-jwt-auth)
+at commit `4115458`. The instructor's
+[Module 14 repository](https://github.com/kaw393939/module14_is601) was
+consulted as a read-only assignment reference; its Git history is not part of
+this repository.
+
+- Repository: <https://github.com/MatthewFeroz/module14_is601>
+- Docker Hub: <https://hub.docker.com/r/matthewferoz/module14_is601>
 - Reflection: [REFLECTION.md](REFLECTION.md)
 
-## Features
+## Assignment coverage
 
-- `POST /register` validates names, email, username, password strength, and
-  confirmation with Pydantic; rejects duplicate email addresses and usernames;
-  and stores only a salted bcrypt hash.
-- `POST /login` accepts either an email address or username, returns `401` for
-  invalid credentials, and issues a short-lived HS256 JWT for valid credentials.
-- `GET /auth/me` requires `Authorization: Bearer <token>` and returns the
-  database user represented by the signed token.
-- Jinja provides one shared layout with dedicated home, registration, login,
-  and dashboard templates.
-- JavaScript intercepts form events, performs client-side validation, sends JSON
-  with `fetch`, displays accessible status messages, stores the token in
-  `localStorage`, and includes it in the protected profile request.
-- Nineteen automated tests cover schemas, bcrypt, JWT encoding/decoding, API
-  behavior, and positive and negative Chromium journeys.
-- GitHub Actions starts PostgreSQL, installs Chromium, runs every test, uploads
-  test evidence, and publishes verified AMD64/ARM64 images to Docker Hub.
+| BREAD action | Secured endpoint | Front-end behavior |
+| --- | --- | --- |
+| Browse | `GET /calculations` | Lists only the signed-in user's records |
+| Read | `GET /calculations/{id}` | Opens an owner-protected detail page |
+| Edit | `PUT /calculations/{id}` | Validates inputs and persists a new result |
+| Add | `POST /calculations` | Calculates and saves a user-owned record |
+| Delete | `DELETE /calculations/{id}` | Confirms and removes only the owned record |
 
-## Authentication Flow
+Every calculation request requires `Authorization: Bearer <JWT>`. Record
+queries include both the calculation ID and authenticated user ID, so another
+user receives `404` instead of learning whether a record exists.
 
-```text
-Registration form
-    -> client validation
-    -> POST /register
-    -> Pydantic validation
-    -> bcrypt hash
-    -> PostgreSQL user
+The final feature is a secured **Calculation Insights** panel backed by
+`GET /insights`. It reports the user's record count, average result, highest
+result, latest activity, and operation counts.
 
-Login form
-    -> POST /login
-    -> bcrypt verification
-    -> signed JWT
-    -> localStorage
-    -> GET /auth/me with Authorization: Bearer <JWT>
-    -> authenticated dashboard
-```
+## Submission evidence
 
-The dashboard redirect is a user-experience guard. The actual security boundary
-is the server-side signature, expiry, token-type, active-user, and database
-identity checks performed by `/auth/me`.
+These screenshots come from the completed application and its successful
+delivery pipeline. Select either delivery screenshot to open the corresponding
+public page.
 
-## Run with Docker Compose
+### Successful GitHub Actions workflow
+
+[![Successful GitHub Actions workflow with testing, security scan, and Docker publishing jobs](docs/images/github-actions-success.jpg)](https://github.com/MatthewFeroz/module14_is601/actions/runs/30215387918)
+
+The captured workflow completed the test, container-security, and Docker
+publishing jobs.
+
+### Docker Hub deployment
+
+[![Docker Hub tags showing the immutable commit tag and latest multi-platform image](docs/images/docker-hub-tags.jpg)](https://hub.docker.com/r/matthewferoz/module14_is601/tags)
+
+Docker Hub shows an immutable Git commit tag and `latest`, each containing
+`linux/amd64` and `linux/arm64` images.
+
+### Add and Browse
+
+![Two saved calculation records displayed in the user-specific ledger with live insights](docs/images/bread-add-browse.jpg)
+
+The Add form saved `5 + 7 = 12` and `6 × 5 = 30`. Browse displays both
+user-owned records, while Insights reports two records, an average of 21, and
+a highest result of 30.
+
+### Read
+
+![Owner-protected calculation detail showing 6 multiplied by 5 with result 30](docs/images/bread-read.jpg)
+
+The Read page retrieves one calculation by ID and identifies the view as
+JWT-owner-only.
+
+### Edit
+
+![Calculation edit form showing validated replacement inputs and a live result preview](docs/images/bread-edit.jpg)
+
+The Edit form replaces the inputs with `10, 3`, validates them, and previews
+the recalculated result before sending the `PUT` request.
+
+### Delete
+
+![Ledger after deletion showing one remaining record and recalculated insights](docs/images/bread-delete.jpg)
+
+After confirmed deletion, the multiplication record is gone, the unrelated
+addition record remains, and the private insights update from two records to
+one.
+
+## Quick start with Docker
 
 Prerequisite: Docker Desktop with Docker Compose.
 
 ```bash
-git clone https://github.com/MatthewFeroz/module13-jwt-auth.git
-cd module13-jwt-auth
+git clone https://github.com/MatthewFeroz/module14_is601.git
+cd module14_is601
 docker compose up --build
 ```
 
 Open:
 
 - Application: <http://localhost:8000>
-- Registration: <http://localhost:8000/register>
-- Login: <http://localhost:8000/login>
 - Interactive API documentation: <http://localhost:8000/docs>
 - Health check: <http://localhost:8000/health>
 
-The Compose network connects the application to PostgreSQL without claiming a
-host PostgreSQL port, so it can run alongside databases from earlier modules.
-Stop the application with:
+Stop the stack without deleting database data:
 
 ```bash
 docker compose down
 ```
 
-To also delete the local Module 13 database volume, use the following command.
-This permanently removes accounts created in the Compose environment:
+Remove the development database volume as well:
 
 ```bash
 docker compose down --volumes
 ```
 
-## Run Locally
+## Local development
 
-Python 3.12 is recommended. Without `DATABASE_URL`, local development uses a
-SQLite file; Docker and CI use PostgreSQL.
-
-macOS/Linux:
+Python 3.12 and Bun are recommended. Local development defaults to SQLite;
+Docker and CI use PostgreSQL.
 
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-pip install -r requirements.txt
-playwright install chromium
+python -m pip install -r requirements.txt
+python -m playwright install chromium
 uvicorn app.main:app --reload
 ```
 
-Windows PowerShell:
+Copy `.env.example` to `.env` when supplying PostgreSQL or custom JWT
+configuration. Use a long, randomly generated JWT secret outside development,
+and never commit `.env`.
 
-```powershell
-py -3.12 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-playwright install chromium
-uvicorn app.main:app --reload
-```
+## Tests
 
-For local PostgreSQL, copy `.env.example` to `.env` and update
-`DATABASE_URL` and `JWT_SECRET_KEY`.
-
-## Run the Tests
-
-Install the browser once, then run the complete suite:
+Run the complete Python suite, including real Chromium journeys:
 
 ```bash
-playwright install chromium
-pytest
+pytest -q
+```
+
+Run the pure front-end validation tests with Bun:
+
+```bash
+bun test static/js/script.test.js
 ```
 
 Useful focused commands:
 
 ```bash
-pytest tests/unit -v
-pytest tests/integration -v
-pytest tests/e2e -v
-pytest -m e2e -v
+pytest -q tests/unit
+pytest -q tests/integration
+pytest -q tests/e2e
 ```
 
-The E2E fixture starts the FastAPI server on an available local port. Tests
-locate the actual form labels and buttons, type valid or invalid data, submit
-the forms, inspect user-facing messages, verify the JWT in `localStorage`, and
-load `/auth/me` through the authenticated dashboard.
+The automated coverage includes:
 
-## Build the Production Image
+- Arithmetic and Pydantic validation unit tests.
+- JWT, bcrypt, registration, and login tests inherited from Module 13.
+- Database integration tests for complete BREAD persistence and ownership.
+- Positive and negative Playwright journeys for invalid tokens, malformed
+  operands, division by zero, creation, reading, editing, and deletion.
+- Unit and integration tests for the final Insights feature.
+
+## Container image
+
+Build the same application image used by CI:
 
 ```bash
-docker build --tag module13-jwt-auth:local .
-docker run --rm --publish 8000:8000 \
-  --env DATABASE_URL="sqlite+pysqlite:///./module13.db" \
-  --env JWT_SECRET_KEY="replace-with-a-long-random-secret" \
-  module13-jwt-auth:local
+docker build --tag matthewferoz/module14_is601:local .
 ```
 
-After a successful main-branch workflow:
+After a successful push to `main`:
 
 ```bash
-docker pull matthewferoz/module13-jwt-auth:latest
+docker pull matthewferoz/module14_is601:latest
 ```
 
-The image runs as a non-root user and exposes a Docker health check against
-`/health`.
+The image runs as a non-root user, exposes port `8000`, and includes an
+application health check.
 
 ## CI/CD
 
-`.github/workflows/ci.yml` runs on every push and pull request to `main`.
+`.github/workflows/ci.yml` gates delivery in this order:
 
-1. A PostgreSQL 17 service starts with a dedicated test database.
-2. Python dependencies and Playwright Chromium are installed.
-3. Unit, API integration, and E2E tests run together with coverage.
-4. JUnit, coverage XML, and browser screenshots are uploaded as the
-   `module13-test-evidence` artifact even when a test fails.
-5. Only after the test job passes, Docker Buildx builds the image.
-6. Successful main-branch pushes publish `latest` and immutable commit-SHA tags
-   to Docker Hub.
+1. Start PostgreSQL and run Bun, unit, integration, API, and Playwright tests.
+2. Build the production image and scan fixed high/critical vulnerabilities.
+3. On a successful `main` push, publish `latest` and the immutable commit SHA
+   for `linux/amd64` and `linux/arm64`.
 
-Most recent captured successful run:
-[Test and publish #4](https://github.com/MatthewFeroz/module13-jwt-auth/actions/runs/30207069102).
-Both the PostgreSQL-backed API/Playwright job and the Docker Hub publishing job
-completed successfully, with downloadable test evidence attached to the run.
-
-![GitHub Actions summary showing successful API, Playwright, and Docker publishing jobs](docs/images/github-actions-success.png)
-
-The GitHub repository must define these Actions secrets:
+The GitHub repository requires these Actions secrets:
 
 | Secret | Purpose |
 | --- | --- |
 | `DOCKERHUB_USERNAME` | Docker Hub account used by the login action |
-| `DOCKERHUB_TOKEN` | Docker Hub access token; do not use an account password |
+| `DOCKERHUB_TOKEN` | Docker Hub access token; never use an account password |
 
-## Project Structure
+## Project structure
 
 ```text
 app/
-├── auth.py              # Registration, authentication, bearer dependency
+├── auth.py              # Module 13 registration and bearer dependency
+├── calculations.py      # Module 14 calculation model and arithmetic
 ├── config.py            # Environment-backed settings
 ├── database.py          # SQLAlchemy engine and sessions
-├── main.py              # Web pages and API routes
-├── models.py            # User table
-├── schemas.py           # Pydantic request/response validation
+├── insights.py          # User-specific aggregate feature
+├── main.py              # Web pages and secured API routes
+├── models.py            # Module 13 user model
+├── schemas.py           # Auth and calculation Pydantic contracts
 └── security.py          # bcrypt and JWT helpers
 static/
-├── css/style.css        # Responsive cipher-desk design system
-└── js/app.js            # DOM events, fetch, localStorage, bearer requests
-templates/               # Jinja layout and page templates
+├── css/style.css        # Responsive Module 13-derived visual system
+└── js/
+    ├── script.js        # JWT client and complete BREAD interactions
+    └── script.test.js   # Bun client-validation unit tests
+templates/               # Jinja authentication and calculation pages
 tests/
-├── unit/                # Schema, hashing, and token tests
-├── integration/         # Registration/login/profile API tests
-└── e2e/                 # Playwright browser journeys
-.github/workflows/ci.yml # Test -> Docker Hub pipeline
+├── unit/                # Isolated security, schema, arithmetic, insights
+├── integration/         # API, database, JWT, and ownership boundaries
+└── e2e/                 # Real Chromium authentication and BREAD journeys
 ```
 
-## Browser Evidence
-
-Successful registration:
-
-![Registration form displaying its success message](docs/images/registration-success.png)
-
-Authenticated bearer-token profile:
-
-![Dashboard displaying the profile returned by the protected endpoint](docs/images/authenticated-dashboard.png)
-
-Rejected invalid credentials:
-
-![Login form displaying the server's invalid-credentials response](docs/images/invalid-login.png)
-
-The same screenshots, JUnit report, and XML coverage report are downloadable
-from each GitHub Actions run as the `module13-test-evidence` artifact.
+Alembic was not required because this final submission initializes a fresh
+Module 14 schema and the Insights feature derives values from existing
+calculation records.
