@@ -173,6 +173,13 @@ The image runs as a non-root user and exposes a Docker health check against
 6. Successful main-branch pushes publish `latest` and immutable commit-SHA tags
    to Docker Hub.
 
+Most recent captured successful run:
+[Test and publish #4](https://github.com/MatthewFeroz/module13-jwt-auth/actions/runs/30207069102).
+Both the PostgreSQL-backed API/Playwright job and the Docker Hub publishing job
+completed successfully, with downloadable test evidence attached to the run.
+
+![GitHub Actions summary showing successful API, Playwright, and Docker publishing jobs](docs/images/github-actions-success.png)
+
 The GitHub repository must define these Actions secrets:
 
 | Secret | Purpose |
